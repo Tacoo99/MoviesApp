@@ -5,5 +5,5 @@ import TrendingMovies from "./TrendingMovies"
 export default {
     Cast,
     MovieList,
-    TrendingMovies
+    TrendingMovies,
 }

@@ -40,7 +40,6 @@ export default function Home() {
   const getTrendingMovies = async () => {
     const data = await fetchTrendingMovies();
     if (data && data.results) setTrending(data.results);
-    setLoading(false);
   };
   const getUpcomingMovies = async () => {
     const data = await fetchUpcomingMovies();
@@ -49,6 +48,7 @@ export default function Home() {
   const getTopRatedMovies = async () => {
     const data = await fetchTopRatedMovies();
     if (data && data.results) setTopRated(data.results);
+    setLoading(false);
   };
 
   return (

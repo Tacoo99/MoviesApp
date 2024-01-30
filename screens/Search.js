@@ -34,7 +34,7 @@ export default function Search() {
         setLoading(true);
         searchMovies({
             query: search,
-            include_adult: 'false',
+            include_adult: 'true',
             language: 'en-US',
             page: '1'
         }).then(data=>{
@@ -61,7 +61,8 @@ export default function Search() {
                 className="pb-1 pl-6 flex-1 text-base font-semibold text-white tracking-wider" 
             />
             <TouchableOpacity 
-                onPress={()=> navigation.navigate('Home')}
+                onPress={()=> navigation.navigate('Home',
+                )}
                 className="rounded-full p-3 m-1 bg-neutral-500" 
             >
                 <XMarkIcon size="25" color="white" />
@@ -91,7 +92,6 @@ export default function Search() {
                                         <View className="space-y-2 mb-4">
                                             <Image 
                                                 source={{uri: image185(item.poster_path) || fallbackMoviePoster}} 
-                                                // source={require('../assets/images/moviePoster2.png')}
                                                 className="rounded-3xl" 
                                                 style={{ width: width*0.44, height: height*0.3}} 
                                             />

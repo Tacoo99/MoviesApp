@@ -12,7 +12,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { ChevronLeftIcon } from "react-native-heroicons/outline";
 import { HeartIcon } from "react-native-heroicons/solid";
 import { colors } from "../src/styles";
-import { images, sizes } from "../constants";
+import { sizes } from "../constants";
 import { LinearGradient } from "expo-linear-gradient";
 import Cast from "../src/components/cast";
 import MovieList from "../src/components/movieList";

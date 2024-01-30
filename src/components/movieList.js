@@ -22,7 +22,14 @@ export default function MovieList({ title, data, hideSeeAll }) {
       <View className="mx-4 flex-row justify-between items-center">
         <Text className="text-white text-xl">{title}</Text>
         {!hideSeeAll && (
-          <TouchableOpacity>
+          <TouchableOpacity
+            onPress={() =>
+              navigation.navigate("SeeAll", {
+                screenName: {title},
+                data: {data}
+              })
+            }
+          >
             <Text style={{ color: colors.primary }} className="text-lg">
               See all
             </Text>
@@ -40,7 +47,7 @@ export default function MovieList({ title, data, hideSeeAll }) {
             return (
               <TouchableWithoutFeedback
                 key={index}
-                onPress={() => navigation.push('Movie', item)}
+                onPress={() => navigation.push("Movie", item)}
               >
                 <View className="space-y-1 mr-4">
                   <Image
