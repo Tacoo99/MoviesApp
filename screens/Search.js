@@ -10,7 +10,7 @@ import {
 } from "react-native";
 import React, { useState, useCallback, } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { images, sizes } from "../constants";
+import { sizes } from "../constants";
 import { XMarkIcon } from "react-native-heroicons/outline";
 import { useNavigation } from "@react-navigation/native";
 import Loading from "../src/components/Loading";

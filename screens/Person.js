@@ -8,7 +8,7 @@ import {
   Image,
 } from "react-native";
 import React, { useState, useEffect } from "react";
-import { images, sizes } from "../constants";
+import { sizes } from "../constants";
 import { colors } from "../src/styles";
 import { ChevronLeftIcon } from "react-native-heroicons/outline";
 import { HeartIcon } from "react-native-heroicons/solid";
@@ -33,7 +33,6 @@ export default function Person() {
 
   useEffect(() => {
       setLoading(true)
-      // console.log('person', item)
       getPersonDetails(item.id)
       getPersonMovies(item.id)
 
