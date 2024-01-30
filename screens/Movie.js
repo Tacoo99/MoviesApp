@@ -17,11 +17,16 @@ import { LinearGradient } from "expo-linear-gradient";
 import Cast from "../src/components/cast";
 import MovieList from "../src/components/movieList";
 import Loading from "../src/components/Loading";
+import {
+  fallbackMoviePoster,
+  fetchMovieCredits,
+  fetchMovieDetails,
+  fetchSimilarMovies,
+  image500,
+} from "../api/moviedb";
 
 let width = sizes.width;
 let height = sizes.height;
-
-let movieName = "Ant-Man and the Wasp: Quantumania";
 
 const ios = Platform.OS == "ios";
 const topMargin = ios ? "" : "mt-3";
@@ -30,13 +35,33 @@ export default function Movie() {
   const { params: item } = useRoute();
   const [isFavourite, toggleFavourite] = useState(false);
   const navigation = useNavigation();
-  const [cast, setCast] = useState([1, 2, 3, 4, 5]);
-  const [loading, setLoading] = useState(false);
-  const [similarMovies, setSimilarMovies] = useState([1, 2, 3, 4, 5]);
+  const [cast, setCast] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [similarMovies, setSimilarMovies] = useState([]);
+  const [movie, setMovie] = useState([]);
 
   useEffect(() => {
-    // call the movie details API
+    setLoading(true)
+    getMovieDetails(item.id)
+    getMovieCredits(item.id)
+    getSimilarMovies(item.id)
   }, [item]);
+
+  const getMovieDetails = async (id) => {
+    const data = await fetchMovieDetails(id);
+    if (data) setMovie(data);
+  };
+
+  const getMovieCredits = async (id) => {
+    const data = await fetchMovieCredits(id);
+    if (data && data.cast) setCast(data.cast)
+  };
+
+  const getSimilarMovies = async (id) => {
+    const data = await fetchSimilarMovies(id);
+    if (data && data.results) setSimilarMovies(data.results)
+    setLoading(false);
+  };
 
   return (
     <ScrollView
@@ -71,7 +96,9 @@ export default function Movie() {
         ) : (
           <View>
             <Image
-              source={images.moviePoster2}
+              source={{
+                uri: image500(movie?.poster_path) || fallbackMoviePoster,
+              }}
               style={{ width, height: height * 0.55 }}
             ></Image>
 
@@ -94,35 +121,39 @@ export default function Movie() {
       <View style={{ marginTop: -(height * 0.09) }} className="space-y-3">
         {/* title */}
         <Text className="text-white text-center text-3xl font-bold tracking-tighter">
-          {movieName}
+          {movie?.title}
         </Text>
 
         {/* status, release, runtime */}
 
-        <Text className="text-neutral-400 font-semibold text-base text-center">
-          Released · 2020 · 170 min
-        </Text>
+        {movie?.id ? (
+          <Text className="text-neutral-400 font-semibold text-base text-center">
+            {movie?.status} · {movie?.release_date?.split("-")[0]} ·{" "}
+            {movie?.runtime} min
+          </Text>
+        ) : null}
 
         {/* genres */}
 
         <View className="flex-row justify-center mx-4 space-x-2">
-          <Text className="text-neutral-400 font-semibold text-base text-center">
-            Action ·
-          </Text>
-          <Text className="text-neutral-400 font-semibold text-base text-center">
-            Thriller ·
-          </Text>
-          <Text className="text-neutral-400 font-semibold text-base text-center">
-            Comedy
-          </Text>
+          {movie?.genres?.map((genre, index) => {
+            let showDot = index+1 != movie.genres.length
+            return (
+              <Text
+                key={index}
+                className="text-neutral-400 font-semibold text-base text-center"
+              >
+                {genre?.name} {showDot? '·': null}
+              </Text>
+            );
+          })}
         </View>
 
         {/* description */}
         <Text className="text-neutral-400 mx-4 tracking-wide">
-          Scott Lang and Hope Van Dyne are dragged into the Quantum Realm, along
-          with Hope's parents and Scott's daughter Cassie. Together they must
-          find a way to escape, but what secrets is Hope's mother hiding? And
-          who is the mysterious Kang?
+          {
+            movie?.overview
+          }
         </Text>
       </View>
 
@@ -130,11 +161,7 @@ export default function Movie() {
       <Cast navigation={navigation} cast={cast} />
 
       {/* similar movies */}
-      <MovieList
-        title="Similar movies"
-        hideSeeAll={true}
-        data={similarMovies}
-      ></MovieList>
+      <MovieList title="Similar movies" hideSeeAll={true} data={similarMovies} />
     </ScrollView>
   );
 }

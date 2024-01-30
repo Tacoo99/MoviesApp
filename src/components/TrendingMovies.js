@@ -4,6 +4,7 @@ import Carousel from 'react-native-snap-carousel'
 import { sizes } from '../../constants'
 import { images } from '../../constants'
 import { useNavigation } from '@react-navigation/native'
+import { image500 } from '../../api/moviedb'
 
 let width = sizes.width
 let height = sizes.height
@@ -38,7 +39,7 @@ const MovieCard = ({item, handleClick}) => {
     return (
       <TouchableWithoutFeedback onPress={()=> handleClick(item)}>
         <Image
-        source={images.moviePoster1}
+        source={{uri: image500(item.poster_path)}}
         style={{
           width: width*0.6,
           height: height*0.4
