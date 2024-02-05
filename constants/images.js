@@ -1,12 +1,8 @@
-const emptyStar = require("../assets/images/emptyStar.png");
-const fullStar = require("../assets/images/fullStar.png");
-const line = require("../assets/images/line.png");
 const movieTime = require("../assets/images/movieTime.png");
+const favourites_nothing = require("../assets/images/favourites_nothing.png")
 
 
 export default {
-  emptyStar,
-  fullStar,
-  line,
-  movieTime
+  movieTime,
+  favourites_nothing
 };

@@ -28,8 +28,8 @@ export default function Person() {
   const navigation = useNavigation();
   const [isFavourite, toggleFavourite] = useState(false);
   const [personMovies, setPersonMovies] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [person, setPerson] = useState({});
+  const [loading, setLoading] = useState(false);
+  const [person, setPerson] = useState([]);
 
   useEffect(() => {
       setLoading(true)

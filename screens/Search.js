@@ -10,7 +10,7 @@ import {
 } from "react-native";
 import React, { useState, useCallback, } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { sizes } from "../constants";
+import { images, sizes } from "../constants";
 import { XMarkIcon } from "react-native-heroicons/outline";
 import { useNavigation } from "@react-navigation/native";
 import Loading from "../src/components/Loading";
@@ -92,7 +92,7 @@ export default function Search() {
                                         <View className="space-y-2 mb-4">
                                             <Image 
                                                 source={{uri: image185(item.poster_path) || fallbackMoviePoster}} 
-                                                className="rounded-3xl" 
+                                                className="rounded-3xl"
                                                 style={{ width: width*0.44, height: height*0.3}} 
                                             />
                                             <Text className="text-gray-300 ml-1">
@@ -111,7 +111,7 @@ export default function Search() {
             ):(
                 <View className="flex-row justify-center">
                     <Image 
-                        source={require('../assets/images/movieTime.png')} 
+                        source={images.movieTime} 
                         className="h-96 w-96"
                     />
                 </View>
