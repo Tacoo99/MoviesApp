@@ -49,10 +49,20 @@ const getAllKeys = async () => {
     console.log('String successfully readed')
   }
 
+  const removeObject = async (key) => {
+    try {
+      await AsyncStorage.removeItem(key)
+    } catch(e) {
+      console.log('Error while deleting object: ', e)
+    }
+    console.log('Object successfully deleted.')
+  }
+
   export default {
     getAllKeys,
     clearAll,
     setObjectItem,
     getObjectItem,
     getStringValue,
+    removeObject,
   }

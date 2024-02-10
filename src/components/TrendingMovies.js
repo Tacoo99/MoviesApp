@@ -2,7 +2,6 @@ import { View, Text, Image, TouchableWithoutFeedback } from 'react-native'
 import React from 'react'
 import Carousel from 'react-native-snap-carousel'
 import { sizes } from '../../constants'
-import { images } from '../../constants'
 import { useNavigation } from '@react-navigation/native'
 import { image500 } from '../../api/moviedb'
 

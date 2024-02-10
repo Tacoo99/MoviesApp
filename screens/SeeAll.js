@@ -14,7 +14,7 @@ import { StatusBar } from "expo-status-bar";
 import { colors } from "../src/styles";
 import { ChevronLeftIcon } from "react-native-heroicons/outline";
 import { useNavigation } from "@react-navigation/native";
-import { image185 } from "../api/moviedb";
+import { image185, fallbackMoviePoster } from "../api/moviedb";
 
 let width = sizes.width;
 let height = sizes.height;

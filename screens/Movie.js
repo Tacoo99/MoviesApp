@@ -17,7 +17,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import Cast from "../src/components/cast";
 import MovieList from "../src/components/movieList";
 import Loading from "../src/components/Loading";
-import SnackBar from "react-native-snackbar-component";
+import Snackbar from "../src/components/Snackbar";
 
 import {
   fallbackMoviePoster,
@@ -46,7 +46,6 @@ export default function Movie() {
   const [snackbarText, setSnackbarText] = useState("");
   const [movieID, setMovieID] = useState("");
 
-  let emptyKeysArray = false;
 
   useEffect(() => {
     const fetchMovieID = async () => {
@@ -63,9 +62,7 @@ export default function Movie() {
   useEffect(() => {
     setLoading(true);
     checkMoviesStorage();
-    getMovieDetails(item.id);
-    getMovieCredits(item.id);
-    getSimilarMovies(item.id);
+    fetchData(item.id)
   }, [item, movieID]);
 
   useEffect(() => {
@@ -81,25 +78,21 @@ export default function Movie() {
   const checkMoviesStorage = async () => {
     if (movieID !== "") {
       const keysArray =
-        (await AsyncStorageOperations.getObjectItem("movie")) || [];
+        (await AsyncStorageOperations.getObjectItem("movies")) || [];
       emptyKeysArray = keysArray.length === 0;
       toggleFavourite(keysArray.includes(movieID));
-      console.log(
-        emptyKeysArray ? "KeysArray is empty" : "KeysArray is not empty"
-      );
     }
   };
 
   async function manageFavourites() {
     setSnackbarVisible(!snackbarVisible);
-
+    
     const existingFavorites =
-      (await AsyncStorageOperations.getObjectItem("movie")) || [];
+      (await AsyncStorageOperations.getObjectItem("movies")) || [];
     const updatedFavorites = [...existingFavorites];
 
     if (isFavourite) {
       toggleFavourite(false);
-      console.log("Deleting from favourites");
       setSnackbarText("Deleting from favourites");
 
       const indexToRemove = updatedFavorites.indexOf(movieID);
@@ -108,15 +101,13 @@ export default function Movie() {
       }
     } else {
       toggleFavourite(true);
-      console.log("Adding to favourites");
       setSnackbarText("Adding to favourites");
 
       if (!updatedFavorites.includes(movieID)) {
         updatedFavorites.push(movieID);
       }
     }
-
-    AsyncStorageOperations.setObjectItem("movie", updatedFavorites);
+    AsyncStorageOperations.setObjectItem("movies", updatedFavorites);
   }
 
   const getMovieDetails = async (id) => {
@@ -132,14 +123,20 @@ export default function Movie() {
   const getSimilarMovies = async (id) => {
     const data = await fetchSimilarMovies(id);
     if (data && data.results) setSimilarMovies(data.results);
-    setLoading(false);
   };
+
+  async function fetchData(id){
+    await getMovieDetails(id)
+    await getMovieCredits(id)
+    await getSimilarMovies(id)
+    setLoading(false);
+  }
 
   return (
     <View className="flex-1">
       <ScrollView
-        contentContainerStyle={{ paddingBottom: 20 }}
         className="flex-1 bg-neutral-900"
+        contentContainerStyle={{ paddingBottom: 20 }}
       >
         {/* back button and movie poster */}
         <View className="w-full">
@@ -157,7 +154,7 @@ export default function Movie() {
               <ChevronLeftIcon size="32" strokeWidth={2.5} color="white" />
             </TouchableOpacity>
             <TouchableOpacity onPress={() => manageFavourites()}>
-              <HeartIcon size="35" color={isFavourite ? "red" : "white"} />
+              <HeartIcon size="38" color={isFavourite ? "red" : "white"} />
             </TouchableOpacity>
           </SafeAreaView>
 
@@ -170,8 +167,7 @@ export default function Movie() {
                   uri: image500(movie?.poster_path) || fallbackMoviePoster,
                 }}
                 style={{ width, height: height * 0.55 }}
-              ></Image>
-
+              />
               <LinearGradient
                 colors={[
                   "transparent",
@@ -187,7 +183,6 @@ export default function Movie() {
         </View>
 
         {/* movie details */}
-
         <View style={{ marginTop: -(height * 0.09) }} className="space-y-3">
           {/* title */}
           <Text className="text-white text-center text-3xl font-bold tracking-tighter">
@@ -195,7 +190,6 @@ export default function Movie() {
           </Text>
 
           {/* status, release, runtime */}
-
           {movie?.id ? (
             <Text className="text-neutral-400 font-semibold text-base text-center">
               {movie?.status} · {movie?.release_date?.split("-")[0]} ·{" "}
@@ -204,7 +198,6 @@ export default function Movie() {
           ) : null}
 
           {/* genres */}
-
           <View className="flex-row justify-center mx-4 space-x-2">
             {movie?.genres?.map((genre, index) => {
               let showDot = index + 1 != movie.genres.length;
@@ -226,30 +219,15 @@ export default function Movie() {
         </View>
 
         {/* cast */}
-        <Cast navigation={navigation} cast={cast} />
+        <Cast navigation={navigation} cast={cast} title="Top cast" />
 
         {/* similar movies */}
         <MovieList
           title="Similar movies"
-          hideSeeAll={true}
           data={similarMovies}
         />
       </ScrollView>
-      <SnackBar
-        visible={snackbarVisible}
-        position="bottom"
-        containerStyle={{
-          borderRadius: 10,
-          marginHorizontal: 8,
-        }}
-        textMessage={snackbarText}
-        actionHandler={() => setSnackbarVisible(!snackbarVisible)}
-        actionText="Dismiss"
-        autoHidingTime={1500}
-        onDismiss={() => {
-          setSnackbarVisible(!snackbarVisible);
-        }}
-      />
+      <Snackbar snackbarVisible={snackbarVisible} snackbarText={snackbarText}/>
     </View>
   );
 }

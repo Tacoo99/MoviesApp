@@ -20,7 +20,6 @@ import {
   fetchTrendingMovies,
   fetchUpcomingMovies,
 } from "../api/moviedb";
-import AsyncStorageOperations from "../src/components/AsyncStorageOperations";
 
 const ios = Platform.OS == "ios";
 export default function Home() {

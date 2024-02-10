@@ -5,21 +5,18 @@ import {
   Platform,
   TouchableOpacity,
   ScrollView,
-  TouchableWithoutFeedback,
   Image,
 } from "react-native";
 import React, { useState, useCallback, } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { images, sizes } from "../constants";
+import { images } from "../constants";
 import { XMarkIcon } from "react-native-heroicons/outline";
 import { useNavigation } from "@react-navigation/native";
 import Loading from "../src/components/Loading";
 import debounce from "lodash.debounce";
-import { fallbackMoviePoster, image185, searchMovies } from "../api/moviedb";
+import { searchMovies } from "../api/moviedb";
+import LargeList from "../src/components/LargeList";
 
-
-let width = sizes.width;
-let height = sizes.height;
 
 const ios = Platform.OS == "ios";
 const verticalMargin = ios ? "" : "mt-3";
@@ -71,8 +68,7 @@ export default function Search() {
         </View>
 
         {/* search results */}
-        {
-            loading? (
+            {loading? (
                 <Loading />
             ): 
             results.length>0? (
@@ -82,31 +78,7 @@ export default function Search() {
                     className="space-y-3"
                 >
                     <Text className="text-white font-semibold ml-1">Results ({results.length})</Text>
-                    <View className="flex-row justify-between flex-wrap">
-                        {
-                            results.map((item, index)=>{
-                                return (
-                                    <TouchableWithoutFeedback 
-                                        key={index} 
-                                        onPress={()=> navigation.push('Movie', item)}>
-                                        <View className="space-y-2 mb-4">
-                                            <Image 
-                                                source={{uri: image185(item.poster_path) || fallbackMoviePoster}} 
-                                                className="rounded-3xl"
-                                                style={{ width: width*0.44, height: height*0.3}} 
-                                            />
-                                            <Text className="text-gray-300 ml-1">
-                                                {
-                                                    item.title.length>22? item.title.slice(0,22)+'...': item.title
-                                                }
-                                            </Text>
-                                        </View>
-                                    </TouchableWithoutFeedback>
-                                )
-                            })
-                        }
-                    </View>
-                    
+                    <LargeList data={results}/>
                 </ScrollView>
             ):(
                 <View className="flex-row justify-center">
