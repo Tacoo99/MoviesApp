@@ -16,7 +16,6 @@ let width = sizes.width;
 let height = sizes.height;
 
 export default function MovieList({ title, data, hideSeeAll }) {
-  
   const navigation = useNavigation();
   return (
     <View className="mb-8 space-y-4">
@@ -26,8 +25,8 @@ export default function MovieList({ title, data, hideSeeAll }) {
           <TouchableOpacity
             onPress={() =>
               navigation.navigate("SeeAll", {
-                screenName: {title},
-                data: {data}
+                screenName: { title },
+                data: { data },
               })
             }
           >
@@ -52,7 +51,9 @@ export default function MovieList({ title, data, hideSeeAll }) {
               >
                 <View className="space-y-1 mr-4">
                   <Image
-                    source={{uri: image185(item?.poster_path) || fallbackMoviePoster}}
+                    source={{
+                      uri: image185(item?.poster_path) || fallbackMoviePoster,
+                    }}
                     className="rounded-3xl"
                     style={{
                       width: width * 0.33,

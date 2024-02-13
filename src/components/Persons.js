@@ -12,22 +12,28 @@ export default function Persons({ persons, navigation, title }) {
         contentContainerStyle={{ paddingHorizontal: 15 }}
       >
         {persons.map((person, index) => {
-            return (
-              <TouchableOpacity key={index} className="mr-4 item-center" onPress={() => navigation.navigate('Person', person)}>
-                <View className="overflow-hidden rounded-full h-20 w-20 items-center">
-                  <Image
-                    className="rounded-3xl h-24 w-20"
-                    source={{uri: image185(person?.profile_path) || fallbackPersonImage}}
-                  />
-                </View>
-                <Text className="text-white text-xs mt-1">
-                  {person?.name?.length > 10
-                    ? person?.name.slice(0, 10) + "..."
-                    : person?.name}
-                </Text>
-              </TouchableOpacity>
-            );
-          })}
+          return (
+            <TouchableOpacity
+              key={index}
+              className="mr-4 item-center"
+              onPress={() => navigation.navigate("Person", person)}
+            >
+              <View className="overflow-hidden rounded-full h-20 w-20 items-center">
+                <Image
+                  className="rounded-3xl h-24 w-20"
+                  source={{
+                    uri: image185(person?.profile_path) || fallbackPersonImage,
+                  }}
+                />
+              </View>
+              <Text className="text-white text-xs mt-1">
+                {person?.name?.length > 10
+                  ? person?.name.slice(0, 10) + "..."
+                  : person?.name}
+              </Text>
+            </TouchableOpacity>
+          );
+        })}
       </ScrollView>
     </View>
   );

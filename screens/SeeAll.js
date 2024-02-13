@@ -41,13 +41,11 @@ export default function SeeAll({ route }) {
           >
             <ChevronLeftIcon size="32" strokeWidth={2.5} color="white" />
           </TouchableOpacity>
-            <Text className="text-white text-3xl font-bold">
-              <Text style={{ color: colors.primary }}>{withoutQuotes[0]}</Text>
-              {sliceFirstLetter}
-            </Text>
-          <View>
-            {/* placeholder */}
-          </View>
+          <Text className="text-white text-3xl font-bold">
+            <Text style={{ color: colors.primary }}>{withoutQuotes[0]}</Text>
+            {sliceFirstLetter}
+          </Text>
+          <View>{/* placeholder */}</View>
         </View>
         <ScrollView
           showsVerticalScrollIndicator={false}

@@ -13,10 +13,10 @@ import Loading from "../src/components/Loading";
 import { fetchMovieDetails, fetchPersonDetails } from "../api/moviedb";
 import Snackbar from "../src/components/Snackbar";
 import Persons from "../src/components/Persons";
+import Lottie from "../src/components/Lottie";
+import animations from "../constants/animations";
 
 let ios = Platform.OS == "ios";
-let width = sizes.width;
-let height = sizes.height;
 
 export default function Favourites() {
   const navigation = useNavigation();
@@ -29,7 +29,6 @@ export default function Favourites() {
   const [loading, setLoading] = useState(true);
   const [moviesLoaded, setMoviesLoaded] = useState(false);
   const [personsLoaded, setPersonsLoaded] = useState(false);
-
 
   useEffect(() => {
     const fetchPersons = async () => {
@@ -97,7 +96,10 @@ export default function Favourites() {
     try {
       const personData = await fetchPersonDetails(id);
       if (personData !== null) {
-        setFavouritePersonsDetails((prevPersons = []) => [...prevPersons, personData]);
+        setFavouritePersonsDetails((prevPersons = []) => [
+          ...prevPersons,
+          personData,
+        ]);
         setLoading(false);
       }
     } catch (error) {
@@ -108,7 +110,10 @@ export default function Favourites() {
   const deleteAllFavourites = async () => {
     setSnackbarVisible(!snackbarVisible);
     let emptyArray = [];
-    if (favouriteMoviesDetails.length > 0 || favouritePersonsDetails.length > 0) {
+    if (
+      favouriteMoviesDetails.length > 0 ||
+      favouritePersonsDetails.length > 0
+    ) {
       await AsyncStorageOperations.setObjectItem("movies", emptyArray);
       await AsyncStorageOperations.setObjectItem("persons", emptyArray);
       setSnackbarText("All keys cleared");
@@ -148,15 +153,15 @@ export default function Favourites() {
                 hideSeeAll={true}
               />
             ) : (
-              <View className="mt-5 mx-4 items-center">
-                <View className="mb-1">
-                  <Image
-                    source={images.favourites_nothing}
-                    style={{ width: width * 0.9, height: height * 0.3 }}
-                  />
-                </View>
+              <View className="mx-4 items-center">
+                <Lottie
+                  animation={animations.nothingHere}
+                  width={"100%"}
+                  height={"73%"}
+                />
+
                 <Text className="text-white text-xl">Nothing here yet!</Text>
-                <View className="flex-row space-x-1 items-center mt-2">
+                <View className="flex-row space-x-1 items-center">
                   <Text className="text-neutral-400 text-base">
                     Add something by clicking
                   </Text>
@@ -165,9 +170,15 @@ export default function Favourites() {
                 </View>
               </View>
             )}
-            
-            {favouritePersonsDetails != null && favouritePersonsDetails.length > 0 && 
-              <Persons navigation={navigation} title="Persons" persons={favouritePersonsDetails} /> }
+
+            {favouritePersonsDetails != null &&
+              favouritePersonsDetails.length > 0 && (
+                <Persons
+                  navigation={navigation}
+                  title="Persons"
+                  persons={favouritePersonsDetails}
+                />
+              )}
           </>
         )}
       </SafeAreaView>

@@ -41,8 +41,11 @@ export default function Person() {
   const [snackbarText, setSnackbarText] = useState("");
   const [person, setPerson] = useState([]);
   const [personID, setPersonID] = useState("");
+  const [gotPersonMovies, setgotPersonMovies] = useState("")
+  const [gotPersonDetails, setgotPersonDetails] = useState("")
 
   useEffect(() => {
+    setLoading(true)
     const fetchPersonID = async () => {
       try {
         const fetchedID = await item.id;
@@ -55,7 +58,6 @@ export default function Person() {
   }, [item]);
 
   useEffect(() => {
-    setLoading(true)
     checkPersonsStorage();
     fetchData(item.id)
   }, [item, personID]);
@@ -107,18 +109,21 @@ export default function Person() {
 
   const getPersonDetails = async (id) => {
     const data = await fetchPersonDetails(id);
-    if (data) setPerson(data);
+    if (data) setPerson(data)
   };
 
   const getPersonMovies = async (id) => {
     const data = await fetchPersonMovies(id);
-    if (data && data.cast) setPersonMovies(data.cast);
+    if (data && data.cast) setPersonMovies(data.cast)
   };
 
   async function fetchData(id) {
     await getPersonDetails(id);
     await getPersonMovies(id);
-    setLoading(false);
+
+    if (person && personMovies) {
+      setLoading(false)
+    }
   }
 
   return (
@@ -144,9 +149,9 @@ export default function Person() {
             <HeartIcon size="38" color={isFavourite ? "red" : "white"} />
           </TouchableOpacity>
         </SafeAreaView>
-
         {loading ? (
           <Loading />
+
         ) : (
           <View>
             <View
